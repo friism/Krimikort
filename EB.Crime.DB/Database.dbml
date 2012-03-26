@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EBCrime" Class="DatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLEXPRESSADV;Initial Catalog=EBCrime;Integrated Security=True" SettingsObjectName="EB.Crime.DB.Properties.Settings" SettingsPropertyName="EBCrimeConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Category" Member="Categories">
+    <Type Name="Category">
+      <Column Name="CategoryId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DisplayName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Association Name="Category_Event" Member="Events" ThisKey="CategoryId" OtherKey="CategoryId" Type="Event" />
+    </Type>
+  </Table>
+  <Table Name="dbo.GeoCacheEntry" Member="GeoCacheEntries">
+    <Type Name="GeoCacheEntry">
+      <Column Name="Lat" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Lng" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AddressText" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="StatusCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Precinct" Member="Precincts">
+    <Type Name="Precinct">
+      <Column Name="PrecinctId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DisplayName" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
+      <Column Name="UrlName" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
+      <Column Name="ArchiveHtml" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Cutoff" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Precinct_Report" Member="Reports" ThisKey="PrecinctId" OtherKey="PrecinctId" Type="Report" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Report" Member="Reports">
+    <Type Name="Report">
+      <Column Name="ReportId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PrecinctId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Uri" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Html" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="ReportDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CreatedAt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Report_Event" Member="Events" ThisKey="ReportId" OtherKey="ReportId" Type="Event" />
+      <Association Name="Precinct_Report" Member="Precinct" ThisKey="PrecinctId" OtherKey="PrecinctId" Type="Precinct" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Event" Member="Events">
+    <Type Name="Event">
+      <Column Name="EventId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="PlaceString" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="BodyText" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Street" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="StreetSecondary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="IncidentTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ReportId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CategoryId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Lat" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Lng" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Race" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="CreatedAt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Category_Event" Member="Category" ThisKey="CategoryId" OtherKey="CategoryId" Type="Category" IsForeignKey="true" />
+      <Association Name="Report_Event" Member="Report" ThisKey="ReportId" OtherKey="ReportId" Type="Report" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.FindNearestEvents" Method="FindNearestEvents">
+    <Parameter Name="sourceLat" Type="System.Single" DbType="Real" />
+    <Parameter Name="sourceLong" Type="System.Single" DbType="Real" />
+    <Parameter Name="take" Type="System.Int32" DbType="Int" />
+    <Parameter Name="skip" Type="System.Int32" DbType="Int" />
+    <ElementType Name="FindNearestEventsResult">
+      <Column Name="EventId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BodyText" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="CategoryId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IncidentTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Lat" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Lng" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PermId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PlaceString" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Street" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="Title" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Distance" Type="System.Single" DbType="Real" CanBeNull="true" />
+      <Column Name="RowNumber" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+    </ElementType>
+  </Function>
+</Database>

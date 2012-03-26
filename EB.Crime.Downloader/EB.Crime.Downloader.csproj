@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{72BF3523-B322-465E-AFC9-665FCE9BE0A0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EB.Crime.Downloader</RootNamespace>
+    <AssemblyName>EB.Crime.Downloader</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\lib\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
+    <Reference Include="NLog.Extended, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>C:\Users\friism\Documents\Visual Studio 2010\Projects\EB.Crime\lib\NLog.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleBrowser">
+      <HintPath>..\lib\SimpleBrowser\SimpleBrowser.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Categorizer.cs" />
+    <Compile Include="GeoCoding\EventGeocoder.cs" />
+    <Compile Include="GeoCoding\Geocoder.cs" />
+    <Compile Include="GeoCoding\GeoResponse.cs" />
+    <Compile Include="Parsers\CopenhagenParser.cs" />
+    <Compile Include="Parsers\NewEastJutlandParser.cs" />
+    <Compile Include="Parsers\NewFunenParser.cs" />
+    <Compile Include="Parsers\NewSouthSealandParser.cs" />
+    <Compile Include="Parsers\NewMidSealandParser.cs" />
+    <Compile Include="Parsers\NewWestendParser.cs" />
+    <Compile Include="Parsers\MidWestJutlandParser.cs" />
+    <Compile Include="Parsers\EastJutlandParser.cs" />
+    <Compile Include="Parsers\FunenParser.cs" />
+    <Compile Include="Parsers\OverviewParser.cs" />
+    <Compile Include="Parsers\ParserFactory.cs" />
+    <Compile Include="Parsers\SouthSealandParser.cs" />
+    <Compile Include="Parsers\NorthSealandParser.cs" />
+    <Compile Include="Parsers\NorthJutlandParser.cs" />
+    <Compile Include="Parsers\Parser.cs" />
+    <Compile Include="Parsers\MidSealandParser.cs" />
+    <Compile Include="Parsers\WestendParser.cs" />
+    <Compile Include="PrecinctExtensions.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportManager.cs" />
+    <Compile Include="Util\AddressExtracter.cs" />
+    <Compile Include="Util\CustomCategorizer.cs" />
+    <Compile Include="Util\DateParser.cs" />
+    <Compile Include="Util\Doc.cs" />
+    <Compile Include="Util\RegexExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EB.Crime.DB\EB.Crime.DB.csproj">
+      <Project>{50D13085-B246-4FD2-A75D-DC5E09800EC8}</Project>
+      <Name>EB.Crime.DB</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="NLog.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
