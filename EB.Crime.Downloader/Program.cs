@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Configuration;
 using System.Linq;
+using System.Net.Mail;
+using System.Threading;
 using EB.Crime.DB;
+using EB.Crime.Downloader.GeoCoding;
 using EB.Crime.Downloader.Util;
 using NLog;
-using EB.Crime.Downloader.GeoCoding;
-using System.Threading;
 
 namespace EB.Crime.Downloader
 {
@@ -18,18 +19,30 @@ namespace EB.Crime.Downloader
 		{
 			while (true)
 			{
-				DoArchiveHtml();
-
-				var categorizer = new Categorizer();
-				categorizer.Categorize();
-
-				var geocoder = new EventGeocoder();
 				try
 				{
-					geocoder.GeoCodeEvents();
+					DoArchiveHtml();
+
+					var categorizer = new Categorizer();
+					categorizer.Categorize();
+
+					var geocoder = new EventGeocoder();
+					try
+					{
+						geocoder.GeoCodeEvents();
+					}
+					catch (GoogleIsSulkingException)
+					{
+					}
 				}
-				catch (GoogleIsSulkingException)
+				catch (Exception exception)
 				{
+					using (var smtpClient = new SmtpClient())
+					{
+						var emailAddress = ConfigurationManager.AppSettings.Get("logemailaddress");
+						smtpClient.Send(new MailMessage(
+							emailAddress, emailAddress, "Problem scraping", exception.ToString()));
+					}
 				}
 
 				Thread.Sleep(1000 * 60 * 60 * 24);
@@ -78,32 +91,32 @@ namespace EB.Crime.Downloader
 
 		//public static void DoScrape()
 		//{
-			//IEnumerable<Report> reports = (new WestendParser()).GetIncremental();
-			//reports = reports.Concat((new CopenhagenParser()).GetIncremental());
-			//reports = reports.Concat((new MidSealandParser()).GetIncremental());
-			//reports = reports.Concat((new NorthJutlandParser()).GetIncremental());
-			//reports = reports.Concat((new NorthSealandParser()).GetIncremental());
-			//reports = reports.Concat((new SouthSealandParser()).GetIncremental());
-			//reports = reports.Concat((new FunenParser()).GetIncremental());
-			//reports = reports.Concat((new EastJutlandParser()).GetIncremental());
-			//reports = reports.Concat((new MidWestJutlandParser()).GetIncremental());
-			//Parser.Categorize();
-			//Parser.GeoCodeEvents();
+		//IEnumerable<Report> reports = (new WestendParser()).GetIncremental();
+		//reports = reports.Concat((new CopenhagenParser()).GetIncremental());
+		//reports = reports.Concat((new MidSealandParser()).GetIncremental());
+		//reports = reports.Concat((new NorthJutlandParser()).GetIncremental());
+		//reports = reports.Concat((new NorthSealandParser()).GetIncremental());
+		//reports = reports.Concat((new SouthSealandParser()).GetIncremental());
+		//reports = reports.Concat((new FunenParser()).GetIncremental());
+		//reports = reports.Concat((new EastJutlandParser()).GetIncremental());
+		//reports = reports.Concat((new MidWestJutlandParser()).GetIncremental());
+		//Parser.Categorize();
+		//Parser.GeoCodeEvents();
 		//}
 
 		//static void EmptyReports()
 		//{
-			//(new WestendParser()).ExamineEmptyReports();
-			//(new CopenhagenParser()).ExamineEmptyReports();
-			//(new MidSealandParser()).ExamineEmptyReports();
-			//(new NorthJutlandParser()).ExamineEmptyReports();
-			//(new NorthSealandParser()).ExamineEmptyReports();
-			//(new SouthSealandParser()).ExamineEmptyReports();
-			//(new FunenParser()).ExamineEmptyReports();
-			//(new EastJutlandParser()).ExamineEmptyReports();
-			//(new MidWestJutlandParser()).ExamineEmptyReports();
-			//Parser.Categorize();
-			//Parser.GeoCodeEvents();
+		//(new WestendParser()).ExamineEmptyReports();
+		//(new CopenhagenParser()).ExamineEmptyReports();
+		//(new MidSealandParser()).ExamineEmptyReports();
+		//(new NorthJutlandParser()).ExamineEmptyReports();
+		//(new NorthSealandParser()).ExamineEmptyReports();
+		//(new SouthSealandParser()).ExamineEmptyReports();
+		//(new FunenParser()).ExamineEmptyReports();
+		//(new EastJutlandParser()).ExamineEmptyReports();
+		//(new MidWestJutlandParser()).ExamineEmptyReports();
+		//Parser.Categorize();
+		//Parser.GeoCodeEvents();
 		//}
 
 		static void ResolveAddresses()
