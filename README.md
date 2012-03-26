@@ -1,0 +1,1 @@
+This is the code that runs krimikort.ekstrabladet.dk, both scraper and map. The code copyright of Ekstra Bladet/Michael Friis and is released under the GPL3 license.
