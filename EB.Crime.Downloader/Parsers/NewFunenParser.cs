@@ -132,15 +132,18 @@ namespace EB.Crime.Downloader.Parsers
 					_logger.Info("Couldn't parse " + timestring);
 					continue;
 				}
-				yield return new Event
+				if (!string.IsNullOrEmpty(body))
 				{
-					BodyText = body.Replace("&nbsp;" ,""),
-					IncidentTime = time,
-					PlaceString = placestring,
-					Street = street,
-					Title = titlenode,
-					ReportId = _report.ReportId,
-				};
+					yield return new Event
+					{
+						BodyText = body.Replace("&nbsp;", ""),
+						IncidentTime = time,
+						PlaceString = placestring,
+						Street = street,
+						Title = titlenode,
+						ReportId = _report.ReportId,
+					};
+				}
 			}
 		}
 	}
