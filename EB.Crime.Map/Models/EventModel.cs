@@ -19,10 +19,10 @@ namespace EB.Crime.Map.Models
 			return AbsUrl(e.Title, e.EventId);
 		}
 
-		public static string AbsUrl(string title, int permid)
+		public static string AbsUrl(string title, int eventid)
 		{
 			return "http://krimikort.ekstrabladet.dk" + string.Format("/haendelse/{0}/{1}",
-						title.ToUrlFriendly(), permid);
+						title.ToUrlFriendly(), eventid);
 		}
 	}
 }

@@ -1393,22 +1393,6 @@ namespace EB.Crime.DB
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PermId", DbType="Int NOT NULL")]
-		public int PermId
-		{
-			get
-			{
-				return this._PermId;
-			}
-			set
-			{
-				if ((this._PermId != value))
-				{
-					this._PermId = value;
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlaceString", DbType="NText", UpdateCheck=UpdateCheck.Never)]
 		public string PlaceString
 		{

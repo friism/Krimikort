@@ -29,7 +29,7 @@ namespace EB.Crime.Map.Controllers
 				lat = e.Lat.Value.ToLayarCoord(),
 				lon = e.Lng.Value.ToLayarCoord(),
 				distance = e.Distance.Value,
-				id = e.PermId,
+				id = e.EventId,
 				title = 
 					e.Title + " (" + e.IncidentTime.Value.ToString("d. MMMM yyyy kl. HH:mm") + ")",
 				line2 = e.BodyText,
