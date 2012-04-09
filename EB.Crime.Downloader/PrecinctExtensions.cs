@@ -83,28 +83,16 @@ namespace EB.Crime.Downloader
 			}
 		}
 
-		//public static void GetArchiveFromDBReports(this Precinct precinct)
-		//{
-		//    var db = new DatabaseDataContext();
-		//    var reports = db.Reports.Where(r => r.PrecinctId == precinct.PrecinctId);
-
-		//    // parse events from reports in parallel
-		//    var events = reports.
-		//        AsParallel().
-		//        Where(_ => _.ReportDate.Date > precinct.Cutoff.Value.Date &&
-		//            _.ReportDate.Date <= DateTime.Now.Date).
-		//        SelectMany(_ => ParserFactory.GetParser(_).GetEvents());
-		//    db.Events.InsertAllOnSubmit(events);
-		//    db.SubmitChanges();
-
-		//    // make sure new ones get permid
-		//    foreach (var e in db.Events.Where(_ => _.PermId == null))
-		//    {
-		//        e.PermId = e.EventId;
-		//    }
-
-		//    db.SubmitChanges();
-		//}
-
+		public static void GetArchiveFromRecentDBReports(this Precinct precinct)
+		{
+			var db = new DatabaseDataContext();
+			var relevantreports = db.Reports.Where(r => r.PrecinctId == precinct.PrecinctId &&
+					r.ReportDate.Value > precinct.Cutoff.Value.Date &&
+					r.ReportDate.Value <= DateTime.Now.Date && !r.Events.Any()
+					&& r.ReportDate.Value > DateTime.Now.AddMonths(-1))
+				.AsParallel();
+			// parse events from reports in parallel
+			ExtractAndInsert(relevantreports, db);
+		}
 	}
 }
