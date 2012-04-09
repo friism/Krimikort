@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Models\EventModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\oms.min.js" />
     <Compile Include="Views\ViewUtils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +121,7 @@
     <Content Include="Content\krimikort.png" />
     <Content Include="Content\ui.slider.extras.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\articlemap.js" />
     <Content Include="Scripts\mainmap.js" />
-    <Content Include="Scripts\markerclusterer.js" />
     <Content Include="Scripts\selectToUISlider.jQuery.js" />
     <Content Include="Scripts\templater.js" />
     <Content Include="Scripts\underscore-min.js" />

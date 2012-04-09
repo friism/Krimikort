@@ -11,22 +11,22 @@
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<% if (ViewData["CurrentEvent"] == null)
-		   {%>
-		<meta property="og:title" content="Krimikort" />
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content="http://krimikort.ekstrabladet.dk/" />
+		{%>
+			<meta property="og:title" content="Krimikort" />
+			<meta property="og:type" content="website" />
+			<meta property="og:url" content="http://krimikort.ekstrabladet.dk/" />
 		<%
-			}
-		   else
-		   {
-			   Event theevent = (Event)ViewData["CurrentEvent"];
+		}
+		else
+		{
+			Event theevent = (Event)ViewData["CurrentEvent"];
 		%>
-		<meta property="og:title" content="<%= theevent.Title %>" />
-		<meta property="og:type" content="article" />
-		<meta property="og:url" content="<%= Request.Url %>" />
-		<meta property="og:description" content="<%= theevent.BodyText.Truncate(200, true) %>" />
+			<meta property="og:title" content="<%= theevent.Title %>" />
+			<meta property="og:type" content="article" />
+			<meta property="og:url" content="<%= Request.Url %>" />
+			<meta property="og:description" content="<%= theevent.BodyText.Truncate(200, true) %>" />
 		<%
-			}
+		}
 		%>
 		<meta property="og:image" content="<%= Request.Url.GetLeftPart(UriPartial.Authority) + ResolveUrl("~/Content/krimikort.png") %>" />
 		<meta property="fb:app_id" content="120327367997883" />
@@ -74,37 +74,19 @@
 				<% }%>
 		</script>
 		<%= Bundle.JavaScript()
-						.Add("~/Scripts/markerclusterer.js")
-						.Add("~/Scripts/underscore-min.js")
-						.Add("~/Scripts/selectToUISlider.jQuery.js")
-						.Add("~/Scripts/templater.js")
-						.Add("~/Scripts/mainmap.js")
-						.WithMinifier(JavaScriptMinifiers.Ms)
-						.RenderOnlyIfOutputFileMissing()
-						.Render("~/Scripts/combined_#.js") %>
+				.Add("~/Scripts/oms.min.js")
+				.Add("~/Scripts/underscore-min.js")
+				.Add("~/Scripts/selectToUISlider.jQuery.js")
+				.Add("~/Scripts/templater.js")
+				.Add("~/Scripts/mainmap.js")
+				.WithMinifier(JavaScriptMinifiers.Ms)
+				.RenderOnlyIfOutputFileMissing()
+				.Render("~/Scripts/combined_#.js") %>
+
 		<script id="infoWindowContentTemplate" type="text/html">
 			<div>
 				<p>
 					<strong><#= title #></strong>, <#= street #> - <#= city #> d. <#= date #>
-				</p>
-				<p>
-					<#= text #>
-				</p>
-				<p id="<#= displayid #>">
-					<a href="#" class="tip">Har du billede, tip eller kommentar?</a> 
-					| <a href="<#= url #>">Link til hændelse</a> <br />
-					<iframe 
-						src="http://www.facebook.com/plugins/like.php?href=<#= escapedUrl #>%2F&amp;layout=standard&amp;show_faces=false&amp;width=450&amp;action=recommend&amp;colorscheme=light&amp;height=35" 
-						scrolling="no" frameborder="0" 
-						style="border:none; overflow:hidden; width:450px; height:35px;" 
-						allowTransparency="true"></iframe>
-				</p>
-			</div>
-		</script>
-		<script id="infoWindowContentTemplateIcon" type="text/html">
-			<div>
-				<p>
-					<img style="vertical-align: middle" alt="icon" src="<#= iconUrl #>" /><strong><#= title #></strong>, <#= street #> - <#= city #> d. <#= date #>
 				</p>
 				<p>
 					<#= text #>
@@ -236,8 +218,9 @@
 				var alldates = ViewUtil.GetDateRange(earliestevent, mostrecentevent.AddMonths(1));
 
 				var yearmonts =
-					from d in alldates.Select(d => new { year = d.Year, month = d.ToString("MMM") }).
-						Distinct()
+					from d in alldates.Select(
+							d => new { year = d.Year, month = d.ToString("MMM", System.Globalization.CultureInfo.GetCultureInfo("da-DK")) })
+						.Distinct()
 					group d by d.year into g
 					select new { year = g.Key, months = g };
 			%>
