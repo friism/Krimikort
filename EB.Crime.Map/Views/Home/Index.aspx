@@ -61,9 +61,9 @@
 									categoryid = currentevent.CategoryId,
 									eventid = currentevent.EventId,
 									year = currentevent.IncidentTime.Value.Year,
-									month = currentevent.IncidentTime.Value.ToString("MMM"),
+									month = currentevent.IncidentTime.Value.ToString("MMM", System.Globalization.CultureInfo.GetCultureInfo("da-DK")),
 									nextmonthyear = currentevent.IncidentTime.Value.AddMonths(1).Year,
-									nextmonth = currentevent.IncidentTime.Value.AddMonths(1).ToString("MMM"),
+									nextmonth = currentevent.IncidentTime.Value.AddMonths(1).ToString("MMM", System.Globalization.CultureInfo.GetCultureInfo("da-DK")),
 								}
 						) 
 				%>;

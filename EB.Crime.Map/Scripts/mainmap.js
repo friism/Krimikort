@@ -128,7 +128,12 @@ function refresh() {
 						map.clearOutSideMarkers();
 						_.each(result.events, function (g) {
 							var position = new google.maps.LatLng(g[0], g[1]);
-							map.addMarker(position, g[2], g[3], GetIconName(g[3]), 1);
+							var marker = map.addMarker(position, g[2], g[3], GetIconName(g[3]), 1);
+							if (currentevent && currentevent.eventid === marker.event.id) {
+								// trigger showing this baby
+								google.maps.event.trigger(marker, 'click');
+								currentevent = null;
+							}
 						});
 					}, 'json');
 }
