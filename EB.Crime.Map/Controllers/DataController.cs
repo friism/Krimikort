@@ -80,7 +80,7 @@ namespace EB.Crime.Map.Controllers
 			{
 				text = e.BodyText,
 				city = e.PlaceString,
-				date = e.IncidentTime.Value.ToString("d. MMMM kl. HH:mm"),
+				date = e.IncidentTime.Value.ToString("d. MMMM kl. HH:mm", CultureInfo.GetCultureInfo("da-DK")),
 				street = e.Street ?? "",
 				title = e.Title,
 				displayid = ViewUtil.ToBase26(e.EventId),
