@@ -60,7 +60,7 @@ namespace EB.Crime.Map.Controllers
 								 e.Lng < nelng &&
 								 ((e.CategoryId.HasValue && cats.Contains(e.CategoryId.Value)) ||
 								 (!e.CategoryId.HasValue && cats.Contains(42)))
-						 select new object[] { e.Lat.Value, e.Lng.Value, e.EventId, e.CategoryId };
+						 select new object[] { e.Lat.Value, e.Lng.Value, e.EventId, e.CategoryId ?? 42 };
 
 			return this.Json(
 				new
