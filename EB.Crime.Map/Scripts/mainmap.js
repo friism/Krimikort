@@ -20,14 +20,18 @@ google.maps.Map.prototype.addMarker = function (pos, eid, ecat, icon, z) {
 	}
 };
 
+google.maps.Map.prototype.removeMarker = function (marker) {
+	var index = _.indexOf(eventids, marker.event.id);
+	eventids.splice(index, 1);
+	marker.setMap(null);
+	oms.removeMarker(marker);
+};
+
 google.maps.Map.prototype.clearOutSideMarkers = function () {
 	var bounds = map.getBounds();
-	_.each(oms.getMarkers(), function (m) {
-		if (bounds.contains(m.getPosition()) === false) {
-			var index = _.indexOf(eventids, m.event.id);
-			eventids.splice(index, 1);
-			m.setMap(null);
-			oms.removeMarker(m);
+	_.each(oms.getMarkers(), function (marker) {
+		if (bounds.contains(marker.getPosition()) === false) {
+			map.removeMarker(marker);
 		}
 	});
 };
@@ -37,6 +41,7 @@ google.maps.Map.prototype.clearMarkers = function () {
 		m.setMap(null);
 	});
 	oms.clearMarkers();
+	eventids = [];
 };
 
 $.extend({
@@ -232,16 +237,11 @@ $(function () {
 		} else {
 			// cb was unchecked, remove relevant markers
 			var cbCat = parseInt($(this).attr('id'));
-			//			var removeThese = _.select(cluster.getMarkers(), function (m) {
-			//				if (m.event.catid === cbCat) {
-
-			//					var index = _.indexOf(eventids, m.event.id);
-			//					eventids.splice(index, 1);
-
-			//					return m;
-			//				}
-			//			});
-			//			cluster.removeMarkers(removeThese);
+			_.each(oms.getMarkers(), function (m) {
+				if (m.event.catid === cbCat) {
+					map.removeMarker(m);
+				}
+			});
 		}
 	});
 
@@ -255,15 +255,13 @@ $(function () {
 		e.preventDefault();
 		$('.cat').attr('checked', false);
 		map.clearMarkers();
-		eventids = [];
 	});
 
 	$('select').selectToUISlider({
 		labels: 12,
 		sliderOptions: {
 			change: function (e, ui) {
-				oms.clearMarkers();
-				eventids = [];
+				map.clearMarkers();
 				refresh();
 			}
 		}
@@ -273,7 +271,6 @@ $(function () {
 		if ($(this).attr('checked')) {
 			$('#dateslider').hide();
 			map.clearMarkers();
-			eventids = [];
 			refresh();
 		}
 	});
@@ -282,7 +279,6 @@ $(function () {
 		if ($(this).attr('checked')) {
 			$('#dateslider').hide();
 			map.clearMarkers();
-			eventids = [];
 			refresh();
 		}
 	});
@@ -296,7 +292,6 @@ $(function () {
 		if ($(this).attr('checked')) {
 			$('#dateslider').show();
 			map.clearMarkers();
-			eventids = [];
 			refresh();
 		}
 	});
