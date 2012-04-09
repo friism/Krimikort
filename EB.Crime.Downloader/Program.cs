@@ -14,6 +14,8 @@ namespace EB.Crime.Downloader
 	public class CrimeDownloader
 	{
 		protected static Logger logger = LogManager.GetCurrentClassLogger();
+		private static string[] currentPrecincts = new[] {
+				"Koebenhavn", "Oestjylland", "Fyn", "Sydsjaelland", "Midtvestsjaelland", "Nordsjaelland", "Vestegnen" };
 
 		static void Main(string[] args)
 		{
@@ -21,6 +23,13 @@ namespace EB.Crime.Downloader
 			{
 				try
 				{
+					var db = new DatabaseDataContext();
+					if(db.Events.Any(x => x.CreatedAt > DateTime.Now.AddDays(-1)))
+					{
+						Thread.Sleep(1000 * 60 * 60 * 24);
+						continue;
+					}
+
 					DoArchiveHtml();
 
 					var categorizer = new Categorizer();
@@ -44,8 +53,6 @@ namespace EB.Crime.Downloader
 							emailAddress, emailAddress, "Problem scraping", exception.ToString()));
 					}
 				}
-
-				Thread.Sleep(1000 * 60 * 60 * 24);
 			}
 		}
 
@@ -78,14 +85,23 @@ namespace EB.Crime.Downloader
 
 		static void DoArchiveHtml()
 		{
-			var currentPrecincts = new[] {
-				"Oestjylland", "Fyn", "Sydsjaelland", "Midtvestsjaelland", "Nordsjaelland", "Vestegnen", "Koebenhavn" };
 			var db = new DatabaseDataContext();
 			var precincts = db.Precincts.ToList().Where(x => currentPrecincts.Contains(x.UrlName));
 
 			foreach (var precinct in precincts)
 			{
 				precinct.GetArchiveFromArchiveHtml();
+			}
+		}
+
+		static void DoRecentEmptyReports()
+		{
+			var db = new DatabaseDataContext();
+			var precincts = db.Precincts.ToList().Where(x => currentPrecincts.Contains(x.UrlName));
+
+			foreach (var precinct in precincts)
+			{
+				precinct.GetArchiveFromRecentDBReports();
 			}
 		}
 
