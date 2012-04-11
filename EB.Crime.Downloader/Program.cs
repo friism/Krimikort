@@ -53,6 +53,7 @@ namespace EB.Crime.Downloader
 							emailAddress, emailAddress, "Problem scraping", exception.ToString()));
 					}
 				}
+				Thread.Sleep(1000 * 60 * 60 * 24);
 			}
 		}
 
